@@ -31,7 +31,12 @@ const transactionSchema=new mongoose.Schema({
         required:[true,"Idempotency key is required for a transaction"],
         unique:true,
         index:true
-    }
+    },
+    category: {
+     type: String,
+     enum: ["Food", "Travel", "Bills", "Shopping", "Others"],
+     default: "Others"
+}
 },{
     timestamps:true
 })

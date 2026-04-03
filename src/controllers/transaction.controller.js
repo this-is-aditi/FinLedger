@@ -3,6 +3,7 @@
  const accountModel = require('../models/account.model');
  const emailService = require('../services/email.service');
 const mongoose = require('mongoose');
+const { categorizeTransaction } = require("../services/ai.service");
 /**
  * Create a new transaction
  * 10-step process:
@@ -148,7 +149,7 @@ async function createInitialFundsTransaction(req,res){
                 })
             }
             const fromUserAccount = await accountModel.findOne({
-                systemUser:true,
+                
                 user:req.user._id
             })
             if(!fromUserAccount){
@@ -172,6 +173,11 @@ async function createInitialFundsTransaction(req,res){
                 amount,
                 transaction:transaction._id
              }],{session})
+
+
+            //  await (()=>{
+            //     return new Promise((resolve)=>setTimeout(resolve,100*1000));
+            //  })()
 
             const creditLedgerEntry=await ledgerModel.create( [{
                 account:toAccount,
