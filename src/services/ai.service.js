@@ -6,38 +6,38 @@ const client = new OpenAI({
 
 const categorizeTransaction = async (description) => {
   try {
+    console.log("AI FUNCTION CALLED");
+    console.log("INPUT:", description);
+
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "user",
-          content: `
-Classify the transaction into EXACTLY one category from:
+          content: `Classify this transaction into ONE category:
 Food, Travel, Bills, Shopping, Others.
 
-Rules:
-- Return ONLY the category name
-- No sentence, no explanation
-
 Transaction: "${description}"
-          `,
+
+Return only the category name.`,
         },
       ],
       temperature: 0,
     });
 
-    const result = response.choices[0].message.content.trim();
+    const result = response.choices[0].message.content.trim().toLowerCase();
 
-    // 🔥 Normalize output (IMPORTANT)
-    if (result.includes("Food")) return "Food";
-    if (result.includes("Travel")) return "Travel";
-    if (result.includes("Bills")) return "Bills";
-    if (result.includes("Shopping")) return "Shopping";
+    console.log("RAW AI RESPONSE:", result);
+
+    if (result.includes("food")) return "Food";
+    if (result.includes("travel")) return "Travel";
+    if (result.includes("bill")) return "Bills";
+    if (result.includes("shop")) return "Shopping";
 
     return "Others";
 
   } catch (error) {
-    console.error("AI Error:", error.message);
+    console.error("AI ERROR:", error.message);
     return "Others";
   }
 };

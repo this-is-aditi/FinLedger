@@ -134,12 +134,17 @@ async function createTransaction(req, res) {
 }
 
 async function createInitialFundsTransaction(req,res){
-        const { toAccount, amount, idempotencyKey } = req.body;
-        if(!toAccount || !amount || !idempotencyKey) {
+        const { toAccount, amount, idempotencyKey, description } = req.body;
+        if(!toAccount || !amount || !idempotencyKey || !description) {
             return res.status(400).json({
                 message: "All fields are required"
             })
          }
+          // STEP 1: CALL AI
+          const category = await categorizeTransaction(description);
+          console.log("FINAL CATEGORY:", category);
+
+
             const toUserAccount = await accountModel.findOne({
                 _id: toAccount,
             })
@@ -163,6 +168,8 @@ async function createInitialFundsTransaction(req,res){
                 fromAccount:fromUserAccount._id,
                 toAccount,
                 amount,
+                description,
+                category,
                 idempotencyKey,
                 status:"PENDING"
                 })
@@ -198,6 +205,8 @@ async function createInitialFundsTransaction(req,res){
                 })
 
 }
+
+
 
 module.exports = {
     createTransaction,

@@ -14,3 +14,4 @@ app.listen(3000,()=>{
     console.log("Server is running on port 3000");
     
 })
+console.log("API KEY:", process.env.OPENAI_API_KEY);
