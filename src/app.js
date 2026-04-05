@@ -22,4 +22,11 @@ app.use("/api/auth",authRouter)
 app.use("/api/accounts",accountRouter)
 app.use("/api/transactions",transactionRoutes)
 
+/**
+ * -testing api
+ */
+app.get("/",(req,res)=>{
+    res.send("Ledger service is up and running")
+})
+
 module.exports=app
